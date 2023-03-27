@@ -23,5 +23,23 @@ document.getElementById('post-form').addEventListener('submit', (e) => {
         title: postTitle,
         body: postBody,
     }
-    console.log(data)
+
+    const options = {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    }
+
+    fetch('https://apis.scrimba.com/jsonplaceholder/posts', options)
+        .then((response) => response.json())
+        .then((data) => {
+            blogEl.innerHTML = `
+                <h1>${data.title}</h1>
+                <p>${data.body}</p>
+                <hr>
+                ${blogEl.innerHTML}
+                `
+        })
 })
