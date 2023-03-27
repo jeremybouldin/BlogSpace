@@ -1,18 +1,23 @@
 const blogEl = document.getElementById('blog-posts')
+let postsArray = []
+
+function renderPosts() {
+    let html = ''
+    for (let post of postsArray) {
+        html += `
+        <h1>${post.title}</h1>
+        <p>${post.body}</p>
+        <hr>
+        `
+    }
+    blogEl.innerHTML = html
+}
 
 fetch('https://apis.scrimba.com/jsonplaceholder/posts')
     .then((response) => response.json())
     .then((data) => {
-        const postsArr = data.slice(0, 5)
-        let html = ''
-        postsArr.forEach((element) => {
-            html += `
-                <h1>${element.title}</h1>
-                <p>${element.body}</p>
-                <hr>
-            `
-        })
-        blogEl.innerHTML = html
+        postsArray = data.slice(0, 5)
+        renderPosts()
     })
 
 document.getElementById('post-form').addEventListener('submit', (e) => {
@@ -34,12 +39,10 @@ document.getElementById('post-form').addEventListener('submit', (e) => {
 
     fetch('https://apis.scrimba.com/jsonplaceholder/posts', options)
         .then((response) => response.json())
-        .then((data) => {
-            blogEl.innerHTML = `
-                <h1>${data.title}</h1>
-                <p>${data.body}</p>
-                <hr>
-                ${blogEl.innerHTML}
-                `
+        .then((post) => {
+            postsArray.unshift(post)
+            renderPosts()
         })
 })
+
+// renderPosts(postsArray)
